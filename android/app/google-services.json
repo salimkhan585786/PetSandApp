@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685677598353",
+    "project_id": "petsand-e6f30",
+    "storage_bucket": "petsand-e6f30.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685677598353:android:982630d796e99fef999130",
+        "android_client_info": {
+          "package_name": "com.petsandapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9rvocJyH_maA_SqLpBulyGfZ40Y1RJXg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

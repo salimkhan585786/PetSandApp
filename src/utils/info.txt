@@ -1,0 +1,52 @@
+// Cancellation Policy:
+// - Cancel before 'Packed' status: full refund within 5-7 days
+// - After 'Out for Delivery': no cancellation
+// - Damaged/wrong item: WhatsApp us within 24hrs for replacement
+
+
+
+# In Firestore → users → YOUR_UID → set role = "admin"
+# Or via Firebase Admin SDK in a one-time script:
+await admin.firestore().doc(`users/${YOUR_UID}`).update({ role: 'admin' });
+
+
+// For each slot, sum up kg from all orders
+// slotOrders.reduce((sum, order) => sum + order.totalKg, 0)
+// Display: "Slot 3–5pm: 3 orders / 25kg — OK to go"
+// If > 30kg: auto-defer next order to next slot
+// 20kg bag = 2 slot units, counts double toward bike capacity
+
+
+// Triggered when order.status changes in Firestore ( cloud site )
+const statusMessages = {
+  packed: 'Your order is packed and ready!',
+  out_for_delivery: 'Your sand is on the way! 📨',
+  delivered: 'Delivered! Enjoy fresh litter 🐾',
+  cancelled: 'Your order was cancelled. Refund in 5-7 days.',
+};
+exports.onOrderStatusChange = functions.firestore
+  .document('orders/{orderId}')
+  .onUpdate(async (change, context) => {
+    const { status, userId, fcmToken } = change.after.data();
+    const msg = statusMessages[status];
+    if (!msg || !fcmToken) return;
+    await admin.messaging().send({
+      token: fcmToken,
+      notification: { title: 'PetSand Update', body: msg },
+      data: { orderId: context.params.orderId, status },
+    });
+  });
+
+
+
+[ ] Firestore daily backups enabled
+[ ] Razorpay test mode → test 3 payment flows
+[ ] Admin maintenance toggle works
+[ ] Slot capacity cap tested (4 orders/slot)
+[ ] Address form — all 5 fields required
+[ ] Geofence blocking non-Kandivali addresses
+[ ] FCM notifications received on both Android/iOS
+[ ] WhatsApp Business fallback message drafted
+[ ] Crashlytics reporting a test crash
+[ ] Beta test with 10 users — Google Form feedback link in-app
+[ ] GST number visible on invoice + app footer
